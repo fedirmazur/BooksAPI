@@ -5,22 +5,17 @@ import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.restassured.RestAssured;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import models.Book;
 import org.apache.http.HttpStatus;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
-import static io.restassured.RestAssured.*;
 
 
 public class BooksStepDefinitions {
@@ -39,7 +34,7 @@ public class BooksStepDefinitions {
     @Then("list of books is returned")
     public void listOfBooksIsReturned() {
         SoftAssertions softly = new SoftAssertions();
-        assertThat(allBooks).isNotEmpty();
+        Assertions.assertThat(allBooks).isNotEmpty();
         allBooks.forEach(book -> {
             softly.assertThat(book.getId()).as("%s has id = null", book.toString()).isNotNull();
             softly.assertThat(book.getName()).as("%s has name = null", book.toString()).isNotNull();
@@ -129,7 +124,7 @@ public class BooksStepDefinitions {
     @Then("book is deleted")
     public void bookIsDeleted() {
         response = controller.getBookByIdResponse(book.getId());
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_NOT_FOUND);
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_NOT_FOUND);
     }
 
     @When("user makes GET request for Books API to get response")
@@ -140,7 +135,7 @@ public class BooksStepDefinitions {
 
     @Then("response matches to JSON schema for all books")
     public void responseMatchesToJSONSchemaForAllBooks() {
-        response.then().assertThat().body(matchesJsonSchemaInClasspath("all_books_JSON_schema.json"));
+        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchemaInClasspath("all_books_JSON_schema.json"));
     }
 
     @When("user makes PUT request to update book")
@@ -158,13 +153,13 @@ public class BooksStepDefinitions {
 
         response = controller.updateBook(bookToUpdate);
         response.then().log().all();
-        assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
+        Assertions.assertThat(response.statusCode()).isEqualTo(HttpStatus.SC_OK);
     }
 
     @When("user checks that book is updated")
     public void userChecksThatBookIsUpdated() {
         Book updatedBook = response.as(Book.class);
-        assertThat(updatedBook).isEqualTo(bookToUpdate);
+        Assertions.assertThat(updatedBook).isEqualTo(bookToUpdate);
     }
 
     @Given("setup")
@@ -185,7 +180,7 @@ public class BooksStepDefinitions {
 
     @Then("user checks that response has {int} status code")
     public void userChecksThatResponseHasTheCorrectStatusCode(int statusCode) {
-        assertThat(response.statusCode()).isEqualTo(statusCode);
+        Assertions.assertThat(response.statusCode()).isEqualTo(statusCode);
     }
 
     @When("user makes POST request to create new book with invalid request body")

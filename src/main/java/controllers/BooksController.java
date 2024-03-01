@@ -1,11 +1,8 @@
 package controllers;
 
 import client.Client;
-import io.restassured.RestAssured;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import models.Book;
-import org.json.JSONObject;
 import utils.PropertyUtils;
 
 import java.util.Arrays;

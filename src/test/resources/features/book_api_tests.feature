@@ -15,10 +15,10 @@ Feature: CRUD operations with Books API
 
   @positive @get
   Scenario: Get a book by id
-    When user makes GET request with id 2 to Books API
+    When user makes GET request with id 519 to Books API
     Then user gets a book with certain details
       | id | name                                               | author        | publication                 | category    | pages | price |
-      | 2  | Refactoring: Improving the Design of Existing Code | Martin Fowler | Addison-Wesley Professional | Programming | 448   | 35.50 |
+      | 519  | Refactoring: Improving the Design of Existing Code | Martin Fowler | Addison-Wesley Professional | Programming | 448   | 35.50 |
 
   @positive @post
   Scenario: Create a new book
